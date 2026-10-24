@@ -1,0 +1,10 @@
+<div class="login-container">
+  <h2>Secure Login</h2>
+  <div class="role-switch">
+    <button [class.active]="role==='patient'" (click)="role='patient'">Patient</button>
+    <button [class.active]="role==='doctor'" (click)="role='doctor'">Doctor / Admin</button>
+  </div>
+  <input type="email" placeholder="Email" [(ngModel)]="email">
+  <input type="password" placeholder="Password" [(ngModel)]="password">
+  <button class="login-btn" (click)="login()">Login as {{role}}</button>
+</div>
