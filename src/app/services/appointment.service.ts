@@ -9,13 +9,22 @@ export interface Appointment {
   prescription?: string;
 }
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root'
+})
 export class AppointmentService {
-  appointments = signal<Appointment[]>([
-    { id: 1, patient: 'Amit', time: '10:00 AM', date: '2026-10-25', status: 'Pending', prescription: '' },
-    { id: 2, patient: 'Neha', time: '11:00 AM', date: '2026-10-25', status: 'Pending', prescription: '' },
-    { id: 3, patient: 'Raj', time: '02:00 PM', date: '2026-10-25', status: 'Completed', prescription: 'Paracetamol 500mg' },
-  ]);
+  appointments = signal<Appointment[]>([]);
+
+  addAppointment(patient: string, time: string, date: string) {
+    const newApp: Appointment = {
+      id: Date.now(),
+      patient: patient,
+      time: time,
+      date: date,
+      status: 'Pending'
+    };
+    this.appointments.update(list => [...list, newApp]);
+  }
 
   updateStatus(id: number, status: Appointment['status'], notes: string) {
     this.appointments.update(list => list.map(a => a.id === id ? { ...a, status, prescription: notes } : a));

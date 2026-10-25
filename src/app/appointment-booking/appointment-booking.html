@@ -1,0 +1,8 @@
+<div>
+  <input [(ngModel)]="newPatientName" placeholder="Patient naam" />
+  <input [(ngModel)]="newTime" placeholder="Time ex: 10AM" />
+  <button (click)="addAppointment()">Add</button>
+  <div *ngFor="let a of appointments">
+    {{a.patient}} - {{a.time}}
+  </div>
+</div>

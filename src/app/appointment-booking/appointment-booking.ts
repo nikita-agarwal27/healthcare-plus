@@ -1,21 +1,46 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { AppointmentService } from '../services/appointment.service';
 
 @Component({
   selector: 'app-appointment-booking',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   template: `
-  <div style="padding:20px; border:2px solid green;">
-    <h2>Appointment Booking Works!</h2>
-    <p>Today: {{todayCount}} | Total: {{totalCount}} | Pending: {{pendingCount}}</p>
-    <div *ngFor="let a of appointments">{{a}}</div>
+  <div style="padding:20px; border:1px solid #ccc">
+    <h3>Appointment Booking</h3>
+    <input [(ngModel)]="newPatientName" placeholder="Patient naam" />
+    <input [(ngModel)]="newTime" placeholder="Time ex: 10AM" />
+    <button (click)="addAppointment()">Add</button>
+    <div *ngFor="let a of appointments">
+      {{a.patient}} - {{a.time}} - {{a.status}}
+    </div>
   </div>
-  `
+  `,
+  styleUrl: './appointment-booking.css'
 })
 export class AppointmentBookingComponent {
-  todayCount = 2;
-  totalCount = 10;
-  pendingCount = 3;
-  appointments = ['Amit - 10AM', 'Neha - 11AM', 'Raj - 2PM'];
+  newPatientName = '';
+  newTime = '';
+  todayCount = 0;
+  totalCount = 0;
+  pendingCount = 0;
+
+  constructor(public appointmentService: AppointmentService) {}
+
+  addAppointment(){
+    if(this.newPatientName && this.newTime){
+      this.appointmentService.addAppointment(this.newPatientName, this.newTime, new Date().toISOString().split('T')[0]);
+      this.newPatientName = '';
+      this.newTime = '';
+      this.todayCount++;
+      this.totalCount++;
+      this.pendingCount++;
+    }
+  }
+
+  get appointments() {
+    return this.appointmentService.appointments();
+  }
 }
